@@ -20,12 +20,18 @@ const onFormSubmit = (e) => {
     }
 };
 
+const removeAll = () => {
+    app.options = [];
+    renderApp();
+};
+
 const renderApp = () => {
     const template = (
         <div>
             <h1>{app.title}</h1>
             {app.subtitle && <p>{app.subtitle}</p>}
             <p>{app.options.length !== 0 ? 'Here are your options' : 'No options'}</p>
+            <button onClick={removeAll}>Remove All</button>
             <p>The options length is: {app.options.length}</p>
             <ol>
                 <li>Item one</li>
