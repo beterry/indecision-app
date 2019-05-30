@@ -5,15 +5,36 @@ import AddOption from './AddOption';
 import Header from './Header';
 import Action from './Action';
 import Options from './Options';
+import OptionModal from './OptionModal';
 
 export default class App extends React.Component {
-    constructor(props){
-        super(props);
-        this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
-        this.handlePick = this.handlePick.bind(this);
-        this.handleAddOption = this.handleAddOption.bind(this);
-        this.handleDeleteOption = this.handleDeleteOption.bind(this);
-        this.state = {options: this.props.options};
+    state = {
+        options: this.props.options,
+        selectedOption: undefined
+    };
+    handleDeleteOptions = () => {
+        this.setState({options: []});
+    }
+    handleCloseModal = () => {
+        this.setState({selectedOption: undefined});
+    }
+    handlePick = () => {
+        const ranNumber = Math.floor(Math.random() * this.state.options.length);
+        const option = this.state.options[ranNumber];
+        this.setState({selectedOption: option});
+    }
+    handleAddOption = (option) => {
+        if (!option){
+            return 'Enter valid value to add item';
+        } else if (this.state.options.indexOf(option) > -1){
+            return 'This value already exists';
+        }
+        this.setState((state) => ({options: state.options.concat([option])}));
+    }
+    handleDeleteOption = (optionToRemove) => {
+        this.setState((state) => ({
+            options: this.state.options.filter((option) => optionToRemove !== option)
+        }));
     }
     componentDidMount(){
         try{
@@ -32,27 +53,6 @@ export default class App extends React.Component {
             localStorage.setItem('options', json);
         }
     }
-    handleDeleteOptions(){
-        this.setState({options: []});
-    }
-    handlePick(){
-        const ranNumber = Math.floor(Math.random() * this.state.options.length);
-        const option = this.state.options[ranNumber];
-        alert(option);
-    }
-    handleAddOption(option){
-        if (!option){
-            return 'Enter valid value to add item';
-        } else if (this.state.options.indexOf(option) > -1){
-            return 'This value already exists';
-        }
-        this.setState((state) => ({options: state.options.concat([option])}));
-    }
-    handleDeleteOption(optionToRemove){
-        this.setState((state) => ({
-            options: this.state.options.filter((option) => optionToRemove !== option)
-        }));
-    }
     render() {
         return (
             <main>
@@ -68,6 +68,10 @@ export default class App extends React.Component {
                 />
                 <AddOption 
                     handleAddOption={this.handleAddOption}
+                />
+                <OptionModal 
+                    selectedOption={this.state.selectedOption}
+                    handleCloseModal={this.handleCloseModal}
                 />
             </main>
         );
