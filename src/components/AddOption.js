@@ -14,9 +14,9 @@ export default class AddOption extends React.Component {
     render() {
         return (
             <div>
-                {this.state.error && <p>{this.state.error}</p>}
-                <form onSubmit={this.onFormSubmit}>
-                    <input type="text" name="option"></input>
+                {this.state.error && <p className='add-option__error'>{this.state.error}</p>}
+                <form onSubmit={this.onFormSubmit} className='add-option'>
+                    <input className='add-option__input' type="text" name="option"></input>
                     <button className='button'>Add Option</button>
                 </form>
             </div>
